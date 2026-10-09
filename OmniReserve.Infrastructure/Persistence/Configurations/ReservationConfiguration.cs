@@ -19,6 +19,16 @@ public class ReservationConfiguration
         builder.Property(r => r.RoomId)
             .IsRequired();
 
+        builder.HasOne(r => r.Room)
+            .WithMany(room => room.Reservations)
+            .HasForeignKey(r => r.RoomId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(r => r.User)
+            .WithMany(user => user.Reservations)
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Property(r => r.CheckInDate)
             .HasColumnName("StartDate")
             .IsRequired();

@@ -8,6 +8,9 @@ public class Reservation
     public Guid Id { get; private set; }
     public Guid UserId { get; private set; }
     public Guid RoomId { get; private set; }
+
+    public Room Room { get; private set; } = null!;
+    public User User { get; private set; } = null!;
     public DateTime CheckInDate { get; private set; }
     public DateTime CheckOutDate { get; private set; }
     public decimal TotalPrice { get; private set; }

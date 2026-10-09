@@ -11,6 +11,8 @@ public class User
     public string PasswordHash { get; private set; }
     public Role Role { get; private set; }
 
+    public ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
+
     public User(
         string firstName,
         string lastName,
