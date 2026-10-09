@@ -11,11 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registrar dependencias de Application
+// Registrar Application
 builder.Services.AddApplication();
 
-// Registrar dependencias de Infrastructure
-builder.Services.AddInfrastructure();
+// Registrar Infrastructure con IConfiguration
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -23,7 +23,7 @@ var app = builder.Build();
 app.UseMiddleware<
     OmniReserve.Api.Middlewares.GlobalExceptionHandlingMiddleware>();
 
-// Configurar Swagger
+// Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
