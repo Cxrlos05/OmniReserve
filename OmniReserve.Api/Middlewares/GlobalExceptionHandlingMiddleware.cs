@@ -1,6 +1,8 @@
 
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using OmniReserve.Domain.Exceptions;
+
 using AppValidationException =
     OmniReserve.Application.Common.Exceptions.ValidationException;
 
@@ -37,7 +39,7 @@ public class GlobalExceptionHandlingMiddleware
     {
         context.Response.ContentType = "application/problem+json";
 
-        // Manejar errores de FluentValidation
+        // Manejar errores de validación
         if (exception is AppValidationException validationEx)
         {
             _logger.LogWarning(
@@ -65,8 +67,32 @@ public class GlobalExceptionHandlingMiddleware
 
             return;
         }
+        // Manejar errores del Dominio
+        else if (exception is DomainException domainEx)
+        {
+            _logger.LogWarning(
+                "Error de Dominio: {Message}",
+                domainEx.Message);
 
-        // Manejar errores no contemplados
+            var problemDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Error de Dominio",
+                Detail = domainEx.Message
+            };
+
+            context.Response.StatusCode =
+                StatusCodes.Status400BadRequest;
+
+            await JsonSerializer.SerializeAsync(
+                context.Response.Body,
+                problemDetails,
+                cancellationToken: context.RequestAborted);
+
+            return;
+        }
+
+        // Manejar errores inesperados
         _logger.LogError(
             exception,
             "Ocurrió un error inesperado.");
