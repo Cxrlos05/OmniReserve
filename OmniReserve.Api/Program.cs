@@ -11,9 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registrar dependencias de Application e Infrastructure
+// Registrar dependencias de Application
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+
+// Registrar dependencias de Infrastructure
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
 
